@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false,
+    "forceConsistentCasingInFileNames": false,
+    "baseUrl": "./src/",
+    "paths": {
+      "@errors/*": ["errors/*"],
+      "@custom-types/*": ["types/*"],
+      "@utils/*": ["utils/*"],
+      "@modules/*": ["modules/*"],
+      "@constants/*": ["constants/*"],
+      "@prisma-module/*": ["prisma/*"],
+      "@logger/*": ["logger/*"],
+      "@config/*": ["../common/config/*"],
+      "@filters/*": ["filters/*"],
+      "@pipes/*": ["pipes/*"],
+      "@guards/*": ["guards/*"],
+      "@decorators/*": ["decorators/*"],
+      "@middlewares/*": ["middlewares/*"]
+    }
+  }
+}

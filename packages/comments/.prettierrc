@@ -1,0 +1,26 @@
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "importOrderGroupNamespaceSpecifiers": true,
+  "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
+  "importOrderSortSpecifiers": true,
+  "importOrderSeparation": true,
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "^@modules(.*)$",
+    "^@prisma-module(.*)$",
+    "^@utils(.*)$",
+    "^@custom-types(.*)$",
+    "^@errors(.*)$",
+    "^@constants(.*)$",
+    "^@filters(.*)$",
+    "^@pipes(.*)$",
+    "^@guards(.*)$",
+    "^@decorators(.*)$",
+    "^@middlewares(.*)$",
+    "^@logger(.*)$",
+    "^@config(.*)$",
+    "^[./]"
+  ]
+}

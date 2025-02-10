@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/common",
+      "packages/gateway",
+      "packages/users",
+      "packages/comments"
+    ],
+    "nohoist": []
+  },
+  "scripts": {
+    "build": "yarn workspaces -A run build",
+    "start:local": "docker-compose --compatibility -p user_comments -f deploy/local/docker-compose.yml up --force-recreate --build -d",
+    "docker:down": "docker ps -a --filter 'name=user_comments_' -q | xargs docker rm -f && docker rmi user_comments_app"
+  }
+}
