@@ -2,6 +2,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import { AllExceptionsFilter } from '@filters/all-exception.filter';
+
 import { exceptionFactory } from '@pipes/validation-exception.factory';
 
 import { AppModule } from './app.module';
@@ -16,6 +18,7 @@ async function bootstrap() {
       exceptionFactory,
     }),
   );
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   const config = new DocumentBuilder()
     .setTitle('User comments API')

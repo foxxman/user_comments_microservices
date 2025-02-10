@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ICreateUserDTO } from 'common';
+import { RpcException } from '@nestjs/microservices';
+import { ICreateUserDTO, UsersExceptions } from 'common';
 
 import { UserRepository } from '@modules/repository/user.repository';
 
@@ -29,8 +30,7 @@ export class UsersService {
         props: { username },
         existingUser,
       });
-
-      throw new Error('User already exists');
+      throw new RpcException(UsersExceptions.UserAlreadyExists);
     }
 
     const { hash: passwordHash, salt } = await hashPassword(password);
