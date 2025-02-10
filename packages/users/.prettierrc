@@ -12,6 +12,7 @@
     "^@prisma-module(.*)$",
     "^@utils(.*)$",
     "^@custom-types(.*)$",
+    "^@entities(.*)$",
     "^@errors(.*)$",
     "^@constants(.*)$",
     "^@filters(.*)$",

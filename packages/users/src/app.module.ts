@@ -6,6 +6,7 @@ import { UsersModule } from '@modules/users/users.module';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { RepositoryModule } from './modules/repository/repository.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AppService } from './app.service';
       load: [getConfiguration],
     }),
     UsersModule,
+    RepositoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

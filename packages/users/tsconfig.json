@@ -30,7 +30,8 @@
       "@pipes/*": ["pipes/*"],
       "@guards/*": ["guards/*"],
       "@decorators/*": ["decorators/*"],
-      "@middlewares/*": ["middlewares/*"]
+      "@middlewares/*": ["middlewares/*"],
+      "@entities/*": ["entities/*"]
     }
   }
 }

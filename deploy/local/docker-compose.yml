@@ -18,6 +18,10 @@ services:
     restart: always
     environment:
       - DATABASE_URL=postgres://postgres:mypassword@postgres:5432
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=mypassword
       - USERS_DB=users
       - COMMENTS_DB=comments
       - GATEWAY_PORT=3000

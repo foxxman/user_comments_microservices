@@ -14,4 +14,6 @@ message CreateUserRequest {
 message UserResponse {
   string id = 1;
   string username = 2;
+  string createdAt = 3;
+  string updatedAt = 4;
 }
