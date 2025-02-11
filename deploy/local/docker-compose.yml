@@ -17,6 +17,8 @@ services:
       dockerfile: ./Dockerfile
     restart: always
     environment:
+      - JWT_SECRET=supersecret
+      - JWT_EXPIRES_IN_MINUTES=10
       - DATABASE_URL=postgres://postgres:mypassword@postgres:5432
       - DB_HOST=postgres
       - DB_PORT=5432

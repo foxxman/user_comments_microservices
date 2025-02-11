@@ -15,7 +15,7 @@ import { API_METHODS } from '@constants/decorators';
 import { RestApiRoute } from '@decorators/rest-api-route';
 
 import { CreateUserDto } from './dto';
-import { LoginResponse } from './responses/login.response';
+import { LoginResponse } from './responses';
 
 const REQUEST_TIMEOUT = 30 * 1000;
 

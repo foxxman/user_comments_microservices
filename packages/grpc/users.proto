@@ -3,7 +3,7 @@ syntax = "proto3";
 package users;
 
 service UsersService {
-  rpc CreateUser (CreateUserRequest) returns (UserResponse);
+  rpc CreateUser (CreateUserRequest) returns (LoginResponse);
 }
 
 message CreateUserRequest {
@@ -16,4 +16,19 @@ message UserResponse {
   string username = 2;
   string createdAt = 3;
   string updatedAt = 4;
+}
+
+message Token {
+  string token = 1;
+  string expireAt = 2;
+}
+
+message TokenPair {
+  Token token = 1;
+  Token refresh = 2;
+}
+
+message LoginResponse {
+  UserResponse user = 1;
+  TokenPair tokenPair = 2;
 }

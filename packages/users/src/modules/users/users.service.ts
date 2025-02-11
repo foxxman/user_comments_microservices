@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { ICreateUserDTO, UsersExceptions } from 'common';
 
+import { TokenService } from '@modules/auth/token.service';
 import { UserRepository } from '@modules/repository/user.repository';
 
 import { hashPassword } from '@utils/hash';

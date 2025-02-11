@@ -1,6 +1,12 @@
 import { IConfig } from "./config.types";
 
 export const getConfiguration = (): IConfig => ({
+  jwtSecret: process.env.JWT_SECRET || "secret",
+  jwtExpiresInMinutes: parseInt(process.env.JWT_EXPIRES_IN_MINUTES || "20", 10),
+  refreshExpiresInDaysDefault: parseInt(
+    process.env.REFRESH_EXPIRES_IN_DAYS_DEFAULT || "5",
+    10
+  ),
   database: {
     host: process.env.DB_HOST || "users",
     port: parseInt(process.env.DB_PORT || "5432", 10),
