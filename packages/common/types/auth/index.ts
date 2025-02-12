@@ -14,3 +14,7 @@ export interface IJwtPayload {
     id: string;
   };
 }
+
+export interface IRefreshJwtPayload {
+  pairId: string;
+}

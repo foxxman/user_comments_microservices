@@ -1,6 +1,12 @@
 import { Controller, Inject, forwardRef } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { ICreateUserDTO, ILoginDTO, ILoginResponse } from 'common';
+import {
+  ICreateUserDTO,
+  ILoginDTO,
+  ILoginResponse,
+  IRefreshDTO,
+  IRefreshResponse,
+} from 'common';
 
 import { AuthService } from '@modules/auth/auth.service';
 import { TokenService } from '@modules/auth/token.service';
@@ -31,5 +37,13 @@ export class UsersController {
     const tokenPair = await this.tokenService.generateTokenPair(user);
 
     return { user: userEntityToDto(user), tokenPair };
+  }
+
+  @GrpcMethod('UsersService')
+  async refreshAccessToken(data: IRefreshDTO): Promise<IRefreshResponse> {
+    const { user, tokens } = await this.tokenService.refreshAccessToken(
+      data.refresh,
+    );
+    return { user: userEntityToDto(user), tokens };
   }
 }

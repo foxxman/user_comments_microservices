@@ -14,8 +14,8 @@ import { API_METHODS } from '@constants/decorators';
 
 import { RestApiRoute } from '@decorators/rest-api-route';
 
-import { CreateUserDto, LoginDto } from './dto';
-import { LoginResponse } from './responses';
+import { CreateUserDto, LoginDto, RefreshDTO } from './dto';
+import { LoginResponse, RefreshResponse } from './responses';
 
 const REQUEST_TIMEOUT = 30 * 1000;
 
@@ -63,7 +63,27 @@ export class AuthController implements OnModuleInit {
     @Body() data: LoginDto,
   ): Promise<LoginResponse> {
     return await lastValueFrom(
-      this.usersService.loginWithUsernameAndPassword(data).pipe(timeout(REQUEST_TIMEOUT)),
+      this.usersService
+        .loginWithUsernameAndPassword(data)
+        .pipe(timeout(REQUEST_TIMEOUT)),
+    );
+  }
+
+  @RestApiRoute({
+    method: API_METHODS.PUT,
+    path: '/refresh',
+    summary: 'Refresh access token',
+    response: {
+      httpCode: HttpStatus.OK,
+      description: 'Refresh token',
+      type: RefreshResponse,
+    },
+  })
+  async refreshAccessToken(@Body() data: RefreshDTO): Promise<RefreshResponse> {
+    return await lastValueFrom(
+      this.usersService
+        .refreshAccessToken(data)
+        .pipe(timeout(REQUEST_TIMEOUT)),
     );
   }
 }

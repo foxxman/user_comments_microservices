@@ -1,11 +1,19 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { IJwtPayload, IToken, ITokenPair } from 'common';
+import { RpcException } from '@nestjs/microservices';
+import {
+  IJwtPayload,
+  IRefreshJwtPayload,
+  IToken,
+  ITokenPair,
+  UsersExceptions,
+} from 'common';
 import { randomUUID } from 'crypto';
 import { addDays, addMinutes } from 'date-fns';
 
 import { RefreshTokenRepository } from '@modules/repository/refresh-token.repository';
+import { UserRepository } from '@modules/repository/user.repository';
 
 import { UserEntity } from '@entities/user.entity';
 
@@ -15,6 +23,7 @@ export class TokenService {
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
     private readonly refreshTokenRepository: RefreshTokenRepository,
+    private readonly userRepository: UserRepository,
   ) {}
 
   private readonly refreshExpiresInDaysDefault = this.configService.get<number>(
@@ -116,6 +125,54 @@ export class TokenService {
     return {
       token,
       expireAt,
+    };
+  }
+
+  async refreshAccessToken(token: string): Promise<{
+    user: UserEntity;
+    tokens: ITokenPair;
+  }> {
+    const result = this.jwtService.decode(token);
+
+    if (!result) {
+      this.logger.error({
+        message: `Refresh token is invalid`,
+        props: { result },
+      });
+      throw new RpcException(UsersExceptions.RefreshTokenInvalid);
+    }
+
+    const { pairId } = result as IRefreshJwtPayload;
+
+    const deletedToken = await this.refreshTokenRepository.delete({
+      token,
+      pairId,
+    });
+
+    if (!deletedToken) {
+      this.logger.error({
+        message: `Refresh token not found`,
+        props: { pairId, deletedToken },
+      });
+      throw new RpcException(UsersExceptions.RefreshNotFound);
+    }
+
+    const { userId } = deletedToken;
+    const user = await this.userRepository.findOne({ id: userId });
+
+    if (!user) {
+      this.logger.error({
+        message: `User not found`,
+        props: { userId },
+      });
+      throw new RpcException(UsersExceptions.UserNotFound);
+    }
+
+    const tokens = await this.generateTokenPair(user);
+
+    return {
+      user,
+      tokens,
     };
   }
 }

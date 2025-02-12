@@ -29,11 +29,24 @@ export class RefreshTokenRepository {
     userId: string;
     token: string;
   }): Promise<RefreshTokenEntity> {
-    const user = this.refreshTokenRepository.create({
+    const createdToken = this.refreshTokenRepository.create({
       pairId,
       userId,
       token,
     });
-    return this.refreshTokenRepository.save(user);
+    return this.refreshTokenRepository.save(createdToken);
+  }
+
+  async delete(where: {
+    pairId?: string;
+    token?: string;
+  }): Promise<RefreshTokenEntity | null> {
+    const token = await this.refreshTokenRepository.findOne({ where });
+
+    if (token) {
+      await this.refreshTokenRepository.delete(where);
+    }
+
+    return token;
   }
 }

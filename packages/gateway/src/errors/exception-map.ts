@@ -3,6 +3,8 @@ import { UsersExceptions } from 'common';
 
 import {
   PasswordInvalidException,
+  RefreshNotFoundException,
+  RefreshTokenInvalidException,
   UserAlreadyExistsException,
   UserNotFoundException,
 } from './users';
@@ -13,6 +15,8 @@ const usersMap: { [key: string]: Constructor } = {
   [UsersExceptions.UserNotFound]: UserNotFoundException,
   [UsersExceptions.UserAlreadyExists]: UserAlreadyExistsException,
   [UsersExceptions.PasswordInvalid]: PasswordInvalidException,
+  [UsersExceptions.RefreshTokenInvalid]: RefreshTokenInvalidException,
+  [UsersExceptions.RefreshNotFound]: RefreshNotFoundException,
 };
 
 export const classes: { [key: string]: Constructor } = {
