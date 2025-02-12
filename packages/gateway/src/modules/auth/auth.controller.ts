@@ -14,7 +14,7 @@ import { API_METHODS } from '@constants/decorators';
 
 import { RestApiRoute } from '@decorators/rest-api-route';
 
-import { CreateUserDto } from './dto';
+import { CreateUserDto, LoginDto } from './dto';
 import { LoginResponse } from './responses';
 
 const REQUEST_TIMEOUT = 30 * 1000;
@@ -46,6 +46,24 @@ export class AuthController implements OnModuleInit {
   async createUser(@Body() data: CreateUserDto): Promise<LoginResponse> {
     return await lastValueFrom(
       this.usersService.createUser(data).pipe(timeout(REQUEST_TIMEOUT)),
+    );
+  }
+
+  @RestApiRoute({
+    method: API_METHODS.POST,
+    path: '/login',
+    summary: 'Login with username and password',
+    response: {
+      httpCode: HttpStatus.OK,
+      description: 'Login and password passed',
+      type: LoginResponse,
+    },
+  })
+  async loginWithUsernameAndPassword(
+    @Body() data: LoginDto,
+  ): Promise<LoginResponse> {
+    return await lastValueFrom(
+      this.usersService.loginWithUsernameAndPassword(data).pipe(timeout(REQUEST_TIMEOUT)),
     );
   }
 }

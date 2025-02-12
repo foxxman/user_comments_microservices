@@ -1,6 +1,7 @@
 import { Observable } from "rxjs";
-import { ICreateUserDTO, ILoginResponse } from "../types";
+import { ICreateUserDTO, ILoginDTO, ILoginResponse } from "../types";
 
 export interface IUsersService {
   createUser(data: ICreateUserDTO): Observable<ILoginResponse>;
+  loginWithUsernameAndPassword(data: ILoginDTO): Observable<ILoginResponse>;
 }

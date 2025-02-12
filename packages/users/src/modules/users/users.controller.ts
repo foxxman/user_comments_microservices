@@ -1,7 +1,8 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Inject, forwardRef } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { ILoginResponse } from 'common';
+import { ICreateUserDTO, ILoginDTO, ILoginResponse } from 'common';
 
+import { AuthService } from '@modules/auth/auth.service';
 import { TokenService } from '@modules/auth/token.service';
 
 import { userEntityToDto } from './toDTO';
@@ -12,14 +13,21 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly tokenService: TokenService,
+    @Inject(forwardRef(() => AuthService))
+    private readonly authService: AuthService,
   ) {}
 
   @GrpcMethod('UsersService')
-  async createUser(data: {
-    username: string;
-    password: string;
-  }): Promise<ILoginResponse> {
+  async createUser(data: ICreateUserDTO): Promise<ILoginResponse> {
     const user = await this.usersService.createUser(data);
+    const tokenPair = await this.tokenService.generateTokenPair(user);
+
+    return { user: userEntityToDto(user), tokenPair };
+  }
+
+  @GrpcMethod('UsersService')
+  async loginWithUsernameAndPassword(data: ILoginDTO): Promise<ILoginResponse> {
+    const user = await this.authService.checkUsernameAndPassword(data);
     const tokenPair = await this.tokenService.generateTokenPair(user);
 
     return { user: userEntityToDto(user), tokenPair };

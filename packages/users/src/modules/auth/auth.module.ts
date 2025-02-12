@@ -21,6 +21,6 @@ import { TokenService } from './token.service';
     RepositoryModule,
   ],
   providers: [AuthService, TokenService],
-  exports: [TokenService],
+  exports: [TokenService, AuthService],
 })
 export class AuthModule {}

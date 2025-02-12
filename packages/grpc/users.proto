@@ -4,6 +4,22 @@ package users;
 
 service UsersService {
   rpc CreateUser (CreateUserRequest) returns (LoginResponse);
+  rpc LoginWithUsernameAndPassword (LoginRequest) returns (LoginResponse);
+}
+
+message Token {
+  string token = 1;
+  string expireAt = 2;
+}
+
+message TokenPair {
+  Token token = 1;
+  Token refresh = 2;
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
 }
 
 message CreateUserRequest {
@@ -16,16 +32,6 @@ message UserResponse {
   string username = 2;
   string createdAt = 3;
   string updatedAt = 4;
-}
-
-message Token {
-  string token = 1;
-  string expireAt = 2;
-}
-
-message TokenPair {
-  Token token = 1;
-  Token refresh = 2;
 }
 
 message LoginResponse {
