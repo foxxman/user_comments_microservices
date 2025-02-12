@@ -2,10 +2,12 @@ import { Controller, Inject, forwardRef } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
   ICreateUserDTO,
+  IGetUserByIdDTO,
   ILoginDTO,
   ILoginResponse,
   IRefreshDTO,
   IRefreshResponse,
+  IUserResponse,
 } from 'common';
 
 import { AuthService } from '@modules/auth/auth.service';
@@ -45,5 +47,11 @@ export class UsersController {
       data.refresh,
     );
     return { user: userEntityToDto(user), tokens };
+  }
+
+  @GrpcMethod('UsersService')
+  async getUserById(data: IGetUserByIdDTO): Promise<IUserResponse> {
+    const user = await this.usersService.getUserById(data);
+    return userEntityToDto(user);
   }
 }

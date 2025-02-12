@@ -6,6 +6,7 @@ service UsersService {
   rpc CreateUser (CreateUserRequest) returns (LoginResponse);
   rpc LoginWithUsernameAndPassword (LoginRequest) returns (LoginResponse);
   rpc RefreshAccessToken (RefreshRequest) returns (RefreshResponse);
+  rpc GetUserById (GetUserByIdRequest) returns (UserResponse);
 }
 
 message Token {
@@ -30,6 +31,10 @@ message CreateUserRequest {
 
 message RefreshRequest {
   string refresh = 1;
+}
+
+message GetUserByIdRequest {
+  string id = 1;
 }
 
 message UserResponse {

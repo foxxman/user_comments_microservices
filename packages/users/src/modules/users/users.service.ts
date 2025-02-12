@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
-import { ICreateUserDTO, UsersExceptions } from 'common';
+import { ICreateUserDTO, IGetUserByIdDTO, UsersExceptions } from 'common';
 
 import { UserRepository } from '@modules/repository/user.repository';
 
@@ -43,6 +43,29 @@ export class UsersService {
 
     this.logger.log({
       message: `User was created`,
+      user,
+    });
+
+    return user;
+  }
+
+  async getUserById(data: IGetUserByIdDTO): Promise<UserEntity> {
+    this.logger.log({
+      message: `getUserById`,
+      props: { id: data.id },
+    });
+    const user = await this.userRepository.findOne({ id: data.id });
+
+    if (!user) {
+      this.logger.error({
+        message: `User not found`,
+        props: { id: data.id },
+      });
+      throw new RpcException(UsersExceptions.UserNotFound);
+    }
+
+    this.logger.log({
+      message: `Got user`,
       user,
     });
 

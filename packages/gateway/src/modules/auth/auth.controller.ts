@@ -4,18 +4,22 @@ import {
   HttpStatus,
   Inject,
   OnModuleInit,
+  Req,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
 import { IUsersService, SERVICES_NAMES } from 'common';
 import { lastValueFrom, timeout } from 'rxjs';
 
+import { AuthorizedRequest } from '@custom-types/auth';
+import { GUARD_NAMES } from '@custom-types/guards';
+
 import { API_METHODS } from '@constants/decorators';
 
 import { RestApiRoute } from '@decorators/rest-api-route';
 
 import { CreateUserDto, LoginDto, RefreshDTO } from './dto';
-import { LoginResponse, RefreshResponse } from './responses';
+import { LoginResponse, RefreshResponse, UserResponse } from './responses';
 
 const REQUEST_TIMEOUT = 30 * 1000;
 
@@ -81,8 +85,25 @@ export class AuthController implements OnModuleInit {
   })
   async refreshAccessToken(@Body() data: RefreshDTO): Promise<RefreshResponse> {
     return await lastValueFrom(
+      this.usersService.refreshAccessToken(data).pipe(timeout(REQUEST_TIMEOUT)),
+    );
+  }
+
+  @RestApiRoute({
+    method: API_METHODS.GET,
+    path: '/me',
+    summary: 'Get user by access token',
+    response: {
+      httpCode: HttpStatus.OK,
+      description: 'User object',
+      type: UserResponse,
+    },
+    guardsToUse: [GUARD_NAMES.AUTH],
+  })
+  async getMe(@Req() req: AuthorizedRequest): Promise<UserResponse> {
+    return await lastValueFrom(
       this.usersService
-        .refreshAccessToken(data)
+        .getUserById({ id: req.user.id })
         .pipe(timeout(REQUEST_TIMEOUT)),
     );
   }

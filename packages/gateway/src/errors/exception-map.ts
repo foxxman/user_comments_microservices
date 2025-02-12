@@ -17,6 +17,7 @@ const usersMap: { [key: string]: Constructor } = {
   [UsersExceptions.PasswordInvalid]: PasswordInvalidException,
   [UsersExceptions.RefreshTokenInvalid]: RefreshTokenInvalidException,
   [UsersExceptions.RefreshNotFound]: RefreshNotFoundException,
+  [UsersExceptions.TokenInvalid]: RefreshNotFoundException,
 };
 
 export const classes: { [key: string]: Constructor } = {

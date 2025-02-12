@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SERVICES_NAMES } from 'common';
 import { join } from 'path';
@@ -24,6 +25,13 @@ import { AuthController } from './auth.controller';
         }),
       },
     ]),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('jwtSecret'),
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [AuthController],
 })

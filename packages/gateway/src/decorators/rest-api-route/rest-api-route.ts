@@ -25,8 +25,7 @@ import { GUARD_NAMES } from '@custom-types/guards';
 import { API_METHODS } from '@constants/decorators';
 
 import { getApiMethodDecorator } from './get-api-method';
-
-// import { getRouteGuards } from './get-route-guards';
+import { getRouteGuards } from './get-route-guards';
 
 export interface RestApiRouteOptions {
   method: API_METHODS;
@@ -57,15 +56,15 @@ export const RestApiRoute = ({
   addSwaggerBearerAuth = false,
   interceptors = [],
 }: RestApiRouteOptions) => {
-  // const guardsList = getRouteGuards({
-  //   guardsToUse,
-  // });
+  const guardsList = getRouteGuards({
+    guardsToUse,
+  });
 
   const decoratorListSettings: DecoratorListSettings[] = [
-    // {
-    //   include: true,
-    //   decorator: UseGuards(...guardsList),
-    // },
+    {
+      include: true,
+      decorator: UseGuards(...guardsList),
+    },
     {
       include: true,
       decorator: getApiMethodDecorator({ method, path }),
