@@ -9,9 +9,11 @@ import {
   IRefreshResponse,
   IUserResponse,
 } from 'common';
+import { IUpdateAvatarDTO } from 'common/types/dtos/users';
 
 import { AuthService } from '@modules/auth/auth.service';
 import { TokenService } from '@modules/auth/token.service';
+import { FilesService } from '@modules/files/files.service';
 
 import { userEntityToDto } from './toDTO';
 import { UsersService } from './users.service';
@@ -19,10 +21,11 @@ import { UsersService } from './users.service';
 @Controller('users')
 export class UsersController {
   constructor(
-    private readonly usersService: UsersService,
-    private readonly tokenService: TokenService,
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
+    private readonly usersService: UsersService,
+    private readonly tokenService: TokenService,
+    private readonly fileService: FilesService,
   ) {}
 
   @GrpcMethod('UsersService')
@@ -53,5 +56,20 @@ export class UsersController {
   async getUserById(data: IGetUserByIdDTO): Promise<IUserResponse> {
     const user = await this.usersService.getUserById(data);
     return userEntityToDto(user);
+  }
+
+  @GrpcMethod('UsersService')
+  async updateAvatar(data: IUpdateAvatarDTO): Promise<IUserResponse> {
+    const { fileUrl } = await this.fileService.uploadFile({
+      filename: data.filename,
+      buffer: data.buffer,
+    });
+
+    const updatedUser = await this.usersService.updateAvatar({
+      avatarUrl: fileUrl,
+      userId: data.userId,
+    });
+
+    return userEntityToDto(updatedUser);
   }
 }

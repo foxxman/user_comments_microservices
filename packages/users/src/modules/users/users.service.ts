@@ -71,4 +71,19 @@ export class UsersService {
 
     return user;
   }
+
+  async updateAvatar({
+    avatarUrl,
+    userId,
+  }: {
+    avatarUrl: string;
+    userId: string;
+  }): Promise<UserEntity> {
+    this.logger.log({
+      message: `Update avatar`,
+      props: { avatarUrl, userId },
+    });
+
+    return this.userRepository.update(userId, { avatarUrl });
+  }
 }

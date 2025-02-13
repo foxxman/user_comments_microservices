@@ -17,6 +17,7 @@ services:
       dockerfile: ./Dockerfile
     restart: always
     environment:
+      - BASE_URL=http://localhost:3000
       - JWT_SECRET=supersecret
       - JWT_EXPIRES_IN_MINUTES=10
       - DATABASE_URL=postgres://postgres:mypassword@postgres:5432
@@ -29,10 +30,28 @@ services:
       - GATEWAY_PORT=3000
       - USERS_URL=localhost:3001
       - COMMENTS_URL=localhost:3002
+      - MINIO_ENDPOINT=minio
+      - MINIO_PORT=9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MINIO_BUCKET=uploads
     ports:
       - "3000:3000"
     depends_on:
       - postgres
+      - minio
+
+  minio:
+    image: minio/minio
+    command: server /data
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    ports:
+      - "9000:9000"
+    volumes:
+      - minio_data:/data
 
 volumes:
   il-postgres:
+  minio_data:

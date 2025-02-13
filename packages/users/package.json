@@ -27,6 +27,7 @@
     "common": "*",
     "crypto": "^1.0.1",
     "date-fns": "^4.1.0",
+    "minio": "^8.0.4",
     "pg": "^8.13.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",

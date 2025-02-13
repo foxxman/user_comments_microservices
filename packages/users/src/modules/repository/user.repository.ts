@@ -35,4 +35,17 @@ export class UserRepository {
     });
     return this.userRepository.save(user);
   }
+
+  async update(
+    id: string,
+    data: Partial<UserEntity>,
+  ): Promise<UserEntity | null> {
+    const user = await this.findOne({ id });
+
+    if (user) {
+      return this.userRepository.save({ ...user, ...data });
+    }
+
+    return null;
+  }
 }

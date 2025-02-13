@@ -19,6 +19,9 @@ export class UserEntity {
 
   @Column()
   salt: string;
+  
+  @Column({ nullable: true })
+  avatarUrl: string | null;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;

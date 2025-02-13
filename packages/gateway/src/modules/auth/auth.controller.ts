@@ -29,12 +29,12 @@ export class AuthController implements OnModuleInit {
   private usersService: IUsersService;
 
   constructor(
-    @Inject(SERVICES_NAMES.USERS) private authGrpcClient: ClientGrpc,
+    @Inject(SERVICES_NAMES.USERS) private userGrpcClient: ClientGrpc,
   ) {}
 
   async onModuleInit() {
     this.usersService =
-      this.authGrpcClient.getService<IUsersService>('UsersService');
+      this.userGrpcClient.getService<IUsersService>('UsersService');
   }
 
   @RestApiRoute({

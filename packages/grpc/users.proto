@@ -7,6 +7,7 @@ service UsersService {
   rpc LoginWithUsernameAndPassword (LoginRequest) returns (LoginResponse);
   rpc RefreshAccessToken (RefreshRequest) returns (RefreshResponse);
   rpc GetUserById (GetUserByIdRequest) returns (UserResponse);
+  rpc UpdateAvatar (UpdateAvatarRequest) returns (UserResponse);
 }
 
 message Token {
@@ -37,11 +38,18 @@ message GetUserByIdRequest {
   string id = 1;
 }
 
+message UpdateAvatarRequest {
+  string filename = 1;
+  bytes buffer = 2;
+  string userId = 3;
+}
+
 message UserResponse {
   string id = 1;
   string username = 2;
-  string createdAt = 3;
-  string updatedAt = 4;
+  string avatarUrl = 3;
+  string createdAt = 4;
+  string updatedAt = 5;
 }
 
 message LoginResponse {

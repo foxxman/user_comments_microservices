@@ -18,6 +18,12 @@ export class UserResponse
   username: string;
 
   @ApiProperty({
+    example: 'http://localhost:3000/api/users/avatar/123-456-789.png',
+    type: String,
+  })
+  avatarUrl: string | null;
+
+  @ApiProperty({
     example: new Date().toISOString(),
     description: 'Date in ISO format',
     type: String,
