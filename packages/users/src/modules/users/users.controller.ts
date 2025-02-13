@@ -2,6 +2,7 @@ import { Controller, Inject, forwardRef } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
   ICreateUserDTO,
+  IGetFileResponse,
   IGetUserByIdDTO,
   ILoginDTO,
   ILoginResponse,
@@ -9,7 +10,7 @@ import {
   IRefreshResponse,
   IUserResponse,
 } from 'common';
-import { IUpdateAvatarDTO } from 'common/types/dtos/users';
+import { IGetFileDTO, IUpdateAvatarDTO } from 'common/types/dtos/users';
 
 import { AuthService } from '@modules/auth/auth.service';
 import { TokenService } from '@modules/auth/token.service';
@@ -71,5 +72,14 @@ export class UsersController {
     });
 
     return userEntityToDto(updatedUser);
+  }
+
+  @GrpcMethod('UsersService')
+  async getFile({
+    fileName,
+    bucketName,
+  }: IGetFileDTO): Promise<IGetFileResponse> {
+    const file = await this.fileService.getFile({ bucketName, fileName });
+    return { fileData: file.buffer, fileType: file.mimetype };
   }
 }

@@ -3,13 +3,16 @@ import {
   HttpStatus,
   Inject,
   OnModuleInit,
+  Param,
   Req,
+  Res,
   UploadedFile,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { IUsersService, SERVICES_NAMES } from 'common';
+import { Response } from 'express';
 import { lastValueFrom, timeout } from 'rxjs';
 
 import { UserResponse } from '@modules/auth/responses';
@@ -75,5 +78,32 @@ export class UsersController implements OnModuleInit {
         })
         .pipe(timeout(REQUEST_TIMEOUT)),
     );
+  }
+
+  @RestApiRoute({
+    method: API_METHODS.GET,
+    path: '/files/:bucketName/:fileName',
+    summary: 'Get file from the bucket',
+    response: {
+      httpCode: HttpStatus.OK,
+      description: 'Requested file ',
+    },
+  })
+  async getFile(
+    @Param('fileName') fileName: string,
+    @Param('bucketName') bucketName: string,
+    @Res() res: Response,
+  ) {
+    const { fileType, fileData } = await lastValueFrom(
+      this.usersService
+        .getFile({
+          fileName,
+          bucketName,
+        })
+        .pipe(timeout(REQUEST_TIMEOUT)),
+    );
+
+    res.setHeader('Content-Type', fileType);
+    res.send(Buffer.from(fileData));
   }
 }

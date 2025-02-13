@@ -8,6 +8,7 @@ service UsersService {
   rpc RefreshAccessToken (RefreshRequest) returns (RefreshResponse);
   rpc GetUserById (GetUserByIdRequest) returns (UserResponse);
   rpc UpdateAvatar (UpdateAvatarRequest) returns (UserResponse);
+  rpc GetFile (GetFileRequest) returns (GetFileResponse);
 }
 
 message Token {
@@ -44,6 +45,11 @@ message UpdateAvatarRequest {
   string userId = 3;
 }
 
+message GetFileRequest {
+  string fileName = 1;
+  string bucketName = 2;
+}
+
 message UserResponse {
   string id = 1;
   string username = 2;
@@ -60,4 +66,9 @@ message LoginResponse {
 message RefreshResponse {
   UserResponse user = 1;
   TokenPair tokens = 2;
+}
+
+message GetFileResponse {
+  bytes fileData = 1;
+  string fileType = 2;
 }

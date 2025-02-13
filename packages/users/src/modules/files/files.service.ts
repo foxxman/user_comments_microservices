@@ -1,10 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { RpcException } from '@nestjs/microservices';
+import { IGetFileDTO, UsersExceptions } from 'common';
 import { Client } from 'minio';
+import { Readable } from 'stream';
 
 import { AuthService } from '@modules/auth/auth.service';
 
-import { generateFileLink, getFileNameForStorage } from '@utils/files';
+import {
+  generateFileLink,
+  getFileExtension,
+  getFileNameForStorage,
+} from '@utils/files';
 
 @Injectable()
 export class FilesService {
@@ -58,6 +65,30 @@ export class FilesService {
     });
 
     return { fileUrl };
+  }
+
+  async getFile({
+    bucketName,
+    fileName,
+  }: IGetFileDTO): Promise<{ buffer: Buffer; mimetype: string }> {
+    try {
+      const stream = await this.minioClient.getObject(bucketName, fileName);
+
+      const fileExtension = getFileExtension(fileName);
+
+      const buffer = await new Promise<Buffer>((resolve, reject) => {
+        const chunks: Buffer[] = [];
+        stream.on('data', (chunk) => chunks.push(chunk));
+        stream.on('end', () => resolve(Buffer.concat(chunks)));
+        stream.on('error', reject);
+      });
+      return {
+        mimetype: `image/${fileExtension}`,
+        buffer,
+      };
+    } catch (error) {
+      throw new RpcException(UsersExceptions.AvatarNotFound);
+    }
   }
 
   private async createBucketIfNotExists({

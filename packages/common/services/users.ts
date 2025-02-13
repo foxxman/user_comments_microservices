@@ -1,14 +1,16 @@
 import { Observable } from "rxjs";
 import {
   ICreateUserDTO,
+  IGetFileResponse,
   IGetUserByIdDTO,
   ILoginDTO,
   ILoginResponse,
   IRefreshDTO,
   IRefreshResponse,
   IUserResponse,
+  IGetFileDTO,
+  IUpdateAvatarDTO,
 } from "../types";
-import { IUpdateAvatarDTO } from "../types/dtos/users";
 
 export interface IUsersService {
   createUser(data: ICreateUserDTO): Observable<ILoginResponse>;
@@ -16,4 +18,5 @@ export interface IUsersService {
   refreshAccessToken(data: IRefreshDTO): Observable<IRefreshResponse>;
   getUserById(data: IGetUserByIdDTO): Observable<IUserResponse>;
   updateAvatar(data: IUpdateAvatarDTO): Observable<IUserResponse>;
+  getFile(request: IGetFileDTO): Observable<IGetFileResponse>;
 }
