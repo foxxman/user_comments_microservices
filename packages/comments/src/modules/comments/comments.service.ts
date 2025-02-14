@@ -4,6 +4,7 @@ import { isUUID } from 'class-validator';
 import {
   CommentsExceptions,
   ICreateCommentDTO,
+  IGetCommentsDTO,
   IUpdateCommentDTO,
   IUsersService,
   SERVICES_NAMES,
@@ -55,5 +56,21 @@ export class CommentsService {
     return this.commentRepository.update(data.commentId, {
       text: data.text,
     });
+  }
+
+  async getComments(
+    data: IGetCommentsDTO,
+  ): Promise<{ total: number; comments: CommentEntity[] }> {
+    const total = await this.commentRepository.count({
+      where: { userId: data.userId },
+    });
+
+    const comments = await this.commentRepository.find({
+      where: { userId: data.userId },
+      offset: data.offset,
+      limit: data.limit,
+    });
+
+    return { total, comments };
   }
 }

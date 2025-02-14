@@ -5,6 +5,7 @@ package comments;
 service CommentsService {
     rpc CreateComment (CreateCommentRequest) returns (Comment);
     rpc UpdateComment (UpdateCommentRequest) returns (Comment);
+    rpc GetComments (getCommentsRequest) returns (getCommentsResponse);
 }
 
 message Comment {
@@ -24,4 +25,15 @@ message UpdateCommentRequest {
     string text = 1;
     string userId = 2;
     string commentId = 3;
+}
+
+message getCommentsRequest {
+    string userId = 1;
+    int32 offset = 2;
+    int32 limit = 3;
+}
+
+message getCommentsResponse {
+    repeated Comment comments = 1;
+    int32 total = 2;
 }

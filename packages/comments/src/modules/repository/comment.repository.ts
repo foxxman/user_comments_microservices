@@ -41,4 +41,20 @@ export class CommentRepository {
 
     return null;
   }
+
+  async find(data: {
+    offset: number;
+    limit: number;
+    where: Partial<CommentEntity>;
+  }): Promise<CommentEntity[]> {
+    return this.commentRepository.find({
+      skip: data.offset,
+      take: data.limit,
+      where: data.where,
+    });
+  }
+
+  async count(data: { where: Partial<CommentEntity> }): Promise<number> {
+    return this.commentRepository.count(data);
+  }
 }

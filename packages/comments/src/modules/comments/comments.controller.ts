@@ -1,6 +1,12 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { ICommentResponse, ICreateCommentDTO, IUpdateCommentDTO } from 'common';
+import {
+  ICommentResponse,
+  ICreateCommentDTO,
+  IGetCommentsDTO,
+  IGetCommentsResponse,
+  IUpdateCommentDTO,
+} from 'common';
 
 import { CommentsService } from './comments.service';
 import { commentEntityToDto } from './toDTO';
@@ -19,5 +25,14 @@ export class CommentsController {
   async updateComment(data: IUpdateCommentDTO): Promise<ICommentResponse> {
     const comment = await this.commentsService.updateComment(data);
     return commentEntityToDto(comment);
+  }
+
+  @GrpcMethod('CommentsService')
+  async getComments(data: IGetCommentsDTO): Promise<IGetCommentsResponse> {
+    const { total, comments } = await this.commentsService.getComments(data);
+    return {
+      total,
+      comments: comments.map(commentEntityToDto),
+    };
   }
 }

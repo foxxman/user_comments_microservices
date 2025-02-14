@@ -5,9 +5,11 @@ import {
   Inject,
   OnModuleInit,
   Param,
+  Query,
   Req,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
+import { ApiQuery } from '@nestjs/swagger';
 import { ICommentsService, SERVICES_NAMES } from 'common';
 import { lastValueFrom, timeout } from 'rxjs';
 
@@ -19,7 +21,7 @@ import { API_METHODS } from '@constants/decorators';
 import { RestApiRoute } from '@decorators/rest-api-route';
 
 import { CreateCommentDTO, UpdateCommentDTO } from './dto';
-import { CommentResponse } from './responses';
+import { CommentResponse, GetCommentsResponse } from './responses';
 
 const REQUEST_TIMEOUT = 30 * 1000;
 
@@ -78,6 +80,43 @@ export class CommentsController implements OnModuleInit {
     return await lastValueFrom(
       this.commentsService
         .updateComment({ ...data, commentId, userId: req.user.id })
+        .pipe(timeout(REQUEST_TIMEOUT)),
+    );
+  }
+
+  @RestApiRoute({
+    method: API_METHODS.GET,
+    path: '/',
+    summary: 'Get my comments list',
+    response: {
+      httpCode: HttpStatus.OK,
+      description: 'Comment list',
+      type: GetCommentsResponse,
+    },
+    guardsToUse: [GUARD_NAMES.AUTH],
+    additionalDecorators: [
+      ApiQuery({
+        name: 'offset',
+        required: true,
+        description: 'Pagination offset',
+        example: 0,
+      }),
+      ApiQuery({
+        name: 'limit',
+        required: true,
+        description: 'Number of items to get',
+        example: 10,
+      }),
+    ],
+  })
+  async getComments(
+    @Req() req: AuthorizedRequest,
+    @Query('offset') offset: number,
+    @Query('limit') limit: number,
+  ): Promise<GetCommentsResponse> {
+    return await lastValueFrom(
+      this.commentsService
+        .getComments({ userId: req.user.id, offset, limit })
         .pipe(timeout(REQUEST_TIMEOUT)),
     );
   }
