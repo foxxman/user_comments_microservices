@@ -6,4 +6,5 @@ export enum UsersExceptions {
   RefreshTokenInvalid = "refresh-token-invalid",
   RefreshNotFound = "refresh-not-found",
   AvatarNotFound = "avatar-not-found",
+  UserIsNotAdmin = "user-is-not-admin",
 }

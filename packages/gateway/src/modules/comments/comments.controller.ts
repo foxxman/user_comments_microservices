@@ -143,4 +143,40 @@ export class CommentsController implements OnModuleInit {
         .pipe(timeout(REQUEST_TIMEOUT)),
     );
   }
+
+  @RestApiRoute({
+    method: API_METHODS.GET,
+    path: '/all',
+    summary: 'Get all comments list',
+    response: {
+      httpCode: HttpStatus.OK,
+      description: 'Comment list',
+      type: GetCommentsResponse,
+    },
+    guardsToUse: [GUARD_NAMES.AUTH, GUARD_NAMES.ADMIN],
+    additionalDecorators: [
+      ApiQuery({
+        name: 'offset',
+        required: true,
+        description: 'Pagination offset',
+        example: 0,
+      }),
+      ApiQuery({
+        name: 'limit',
+        required: true,
+        description: 'Number of items to get',
+        example: 10,
+      }),
+    ],
+  })
+  async getAllComments(
+    @Query('offset') offset: number,
+    @Query('limit') limit: number,
+  ): Promise<GetCommentsResponse> {
+    return await lastValueFrom(
+      this.commentsService
+        .getComments({ offset, limit })
+        .pipe(timeout(REQUEST_TIMEOUT)),
+    );
+  }
 }

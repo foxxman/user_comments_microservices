@@ -47,6 +47,7 @@ export class TokenService {
     const token: IToken = await this.signIn({
       id: user.id,
       pairId,
+      isAdmin: user.isAdmin,
     });
 
     this.logger.log({
@@ -63,14 +64,17 @@ export class TokenService {
   async signIn({
     id,
     pairId,
+    isAdmin,
   }: {
     id: string;
     pairId: string;
+    isAdmin: boolean;
   }): Promise<IToken> {
     const jwtPayload: IJwtPayload = {
       pairId,
       user: {
         id,
+        isAdmin,
       },
     };
 

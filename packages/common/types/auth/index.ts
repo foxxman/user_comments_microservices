@@ -12,6 +12,7 @@ export interface IJwtPayload {
   pairId: string;
   user: {
     id: string;
+    isAdmin: boolean;
   };
 }
 

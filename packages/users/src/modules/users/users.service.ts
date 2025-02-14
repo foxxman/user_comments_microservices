@@ -17,7 +17,8 @@ export class UsersService {
   async createUser({
     username,
     password,
-  }: ICreateUserDTO): Promise<UserEntity> {
+    isAdmin = false,
+  }: ICreateUserDTO & { isAdmin?: boolean }): Promise<UserEntity> {
     this.logger.log({
       message: `Create user`,
       props: { username, password },
@@ -39,6 +40,7 @@ export class UsersService {
       username,
       passwordHash,
       salt,
+      isAdmin,
     });
 
     this.logger.log({

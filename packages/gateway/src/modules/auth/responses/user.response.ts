@@ -24,6 +24,12 @@ export class UserResponse
   avatarUrl: string | null;
 
   @ApiProperty({
+    example: false,
+    type: Boolean,
+  })
+  isAdmin: boolean;
+
+  @ApiProperty({
     example: new Date().toISOString(),
     description: 'Date in ISO format',
     type: String,

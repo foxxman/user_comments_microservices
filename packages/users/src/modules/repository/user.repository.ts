@@ -14,6 +14,7 @@ export class UserRepository {
   async findOne(where: {
     id?: string;
     username?: string;
+    isAdmin?: boolean;
   }): Promise<UserEntity | null> {
     const user = await this.userRepository.findOne({ where });
     return user;
@@ -23,15 +24,18 @@ export class UserRepository {
     username,
     passwordHash,
     salt,
+    isAdmin = false,
   }: {
     username: string;
     passwordHash: string;
     salt: string;
+    isAdmin?: boolean;
   }): Promise<UserEntity> {
     const user = this.userRepository.create({
       username,
       passwordHash,
       salt,
+      isAdmin,
     });
     return this.userRepository.save(user);
   }

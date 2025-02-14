@@ -19,9 +19,12 @@ export class UserEntity {
 
   @Column()
   salt: string;
-  
+
   @Column({ nullable: true })
   avatarUrl: string | null;
+
+  @Column({ default: false })
+  isAdmin: boolean;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
