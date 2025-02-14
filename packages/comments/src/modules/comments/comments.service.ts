@@ -1,6 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ClientGrpc } from '@nestjs/microservices';
-import { ICreateCommentDTO, IUsersService, SERVICES_NAMES } from 'common';
+import { ClientGrpc, RpcException } from '@nestjs/microservices';
+import { isUUID } from 'class-validator';
+import {
+  CommentsExceptions,
+  ICreateCommentDTO,
+  IUpdateCommentDTO,
+  IUsersService,
+  SERVICES_NAMES,
+} from 'common';
 import { CommentEntity } from 'entities/comment.entity';
 import { lastValueFrom, timeout } from 'rxjs';
 
@@ -26,5 +33,27 @@ export class CommentsService {
     );
 
     return this.commentRepository.create(data);
+  }
+
+  async updateComment(data: IUpdateCommentDTO): Promise<CommentEntity> {
+    if (!isUUID(data.commentId, '4')) {
+      throw new RpcException(CommentsExceptions.CommentNotFound);
+    }
+
+    const comment = await this.commentRepository.findOne({
+      id: data.commentId,
+    });
+
+    if (!comment) {
+      throw new RpcException(CommentsExceptions.CommentNotFound);
+    }
+
+    if (comment.userId !== data.userId) {
+      throw new RpcException(CommentsExceptions.UserNotCommentOwner);
+    }
+
+    return this.commentRepository.update(data.commentId, {
+      text: data.text,
+    });
   }
 }

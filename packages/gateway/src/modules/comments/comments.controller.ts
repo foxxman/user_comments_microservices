@@ -4,6 +4,7 @@ import {
   HttpStatus,
   Inject,
   OnModuleInit,
+  Param,
   Req,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
@@ -17,7 +18,7 @@ import { API_METHODS } from '@constants/decorators';
 
 import { RestApiRoute } from '@decorators/rest-api-route';
 
-import { CreateCommentDTO } from './dto';
+import { CreateCommentDTO, UpdateCommentDTO } from './dto';
 import { CommentResponse } from './responses';
 
 const REQUEST_TIMEOUT = 30 * 1000;
@@ -53,6 +54,30 @@ export class CommentsController implements OnModuleInit {
     return await lastValueFrom(
       this.commentsService
         .createComment({ ...data, userId: req.user.id })
+        .pipe(timeout(REQUEST_TIMEOUT)),
+    );
+  }
+
+  @RestApiRoute({
+    method: API_METHODS.PUT,
+    path: '/:commentId',
+    summary: 'Update comment',
+    response: {
+      httpCode: HttpStatus.OK,
+      description: 'Comment updated',
+      type: CommentResponse,
+    },
+    guardsToUse: [GUARD_NAMES.AUTH],
+  })
+  async updateComment(
+    @Req() req: AuthorizedRequest,
+    @Body() data: UpdateCommentDTO,
+    @Param('commentId')
+    commentId: string,
+  ): Promise<CommentResponse> {
+    return await lastValueFrom(
+      this.commentsService
+        .updateComment({ ...data, commentId, userId: req.user.id })
         .pipe(timeout(REQUEST_TIMEOUT)),
     );
   }

@@ -4,6 +4,7 @@ package comments;
 
 service CommentsService {
     rpc CreateComment (CreateCommentRequest) returns (Comment);
+    rpc UpdateComment (UpdateCommentRequest) returns (Comment);
 }
 
 message Comment {
@@ -17,4 +18,10 @@ message Comment {
 message CreateCommentRequest {
     string text = 1;
     string userId = 2;
+}
+
+message UpdateCommentRequest {
+    string text = 1;
+    string userId = 2;
+    string commentId = 3;
 }

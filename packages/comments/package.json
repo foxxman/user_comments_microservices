@@ -21,6 +21,7 @@
     "@nestjs/microservices": "^11.0.8",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/typeorm": "^11.0.0",
+    "class-validator": "^0.14.1",
     "common": "*",
     "reflect-metadata": "^0.2.2",
     "rxjs": "7.2.0"
