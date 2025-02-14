@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -16,6 +17,9 @@ export class CommentEntity {
 
   @Column()
   text: string;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  deleteAfter: Date | null;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;

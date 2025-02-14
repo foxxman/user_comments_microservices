@@ -6,6 +6,7 @@ import { join } from 'path';
 
 import { RepositoryModule } from '@modules/repository/repository.module';
 
+import { CommentCleanupService } from './comments-cleanup.service';
 import { CommentsController } from './comments.controller';
 import { CommentsService } from './comments.service';
 
@@ -29,6 +30,6 @@ import { CommentsService } from './comments.service';
     ]),
   ],
   controllers: [CommentsController],
-  providers: [CommentsService],
+  providers: [CommentsService, CommentCleanupService],
 })
 export class CommentsModule {}

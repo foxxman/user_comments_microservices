@@ -15,6 +15,8 @@ import { lastValueFrom, timeout } from 'rxjs';
 
 import { CommentRepository } from '@modules/repository/comment.repository';
 
+import { addTimeToCurrentDate } from '@utils/date';
+
 const REQUEST_TIMEOUT = 30 * 1000;
 
 @Injectable()
@@ -34,7 +36,10 @@ export class CommentsService {
         .pipe(timeout(REQUEST_TIMEOUT)),
     );
 
-    return this.commentRepository.create(data);
+    return this.commentRepository.create({
+      ...data,
+      deleteAfter: addTimeToCurrentDate(data.deleteAfter),
+    });
   }
 
   async updateComment(data: IUpdateCommentDTO): Promise<CommentEntity> {
@@ -92,6 +97,6 @@ export class CommentsService {
       throw new RpcException(CommentsExceptions.UserNotCommentOwner);
     }
 
-    return this.commentRepository.delete(data.commentId);
+    return this.commentRepository.deleteById(data.commentId);
   }
 }

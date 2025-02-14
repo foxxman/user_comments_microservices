@@ -9,6 +9,12 @@ service CommentsService {
     rpc DeleteComment (deleteCommentsRequest) returns (Comment);
 }
 
+enum DeleteAfterEnum {
+  HOUR = 0;
+  DAY = 1;
+  WEEK = 2;
+}
+
 message Comment {
     string id = 1;
     string text = 2;
@@ -20,6 +26,7 @@ message Comment {
 message CreateCommentRequest {
     string text = 1;
     string userId = 2;
+    DeleteAfterEnum deleteAfter = 3; 
 }
 
 message UpdateCommentRequest {

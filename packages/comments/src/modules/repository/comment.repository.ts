@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommentEntity } from 'entities/comment.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 
 @Injectable()
 export class CommentRepository {
@@ -18,13 +18,16 @@ export class CommentRepository {
   async create({
     text,
     userId,
+    deleteAfter,
   }: {
     text: string;
     userId: string;
+    deleteAfter?: Date;
   }): Promise<CommentEntity> {
     const comment = this.commentRepository.create({
       text,
       userId,
+      deleteAfter,
     });
     return this.commentRepository.save(comment);
   }
@@ -58,7 +61,7 @@ export class CommentRepository {
     return this.commentRepository.count(data);
   }
 
-  async delete(id: string): Promise<CommentEntity | null> {
+  async deleteById(id: string): Promise<CommentEntity | null> {
     const comment = await this.findOne({ id });
 
     if (!comment) {
@@ -68,5 +71,9 @@ export class CommentRepository {
     await this.commentRepository.delete(id);
 
     return comment;
+  }
+
+  async delete(where: FindOptionsWhere<CommentEntity>): Promise<void> {
+    await this.commentRepository.delete(where);
   }
 }

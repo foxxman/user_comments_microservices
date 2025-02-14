@@ -1,5 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
+import { DeleteAfterEnum } from 'common';
 
 export class CreateCommentDTO {
   @IsNotEmpty()
@@ -11,4 +19,14 @@ export class CreateCommentDTO {
     example: 'Hi there!',
   })
   text: string;
+
+  @IsOptional()
+  @IsEnum(DeleteAfterEnum)
+  @ApiProperty({
+    description: 'Time after which the comment should be deleted',
+    example: 'hour',
+    enum: DeleteAfterEnum,
+    required: false,
+  })
+  deleteAfter?: DeleteAfterEnum;
 }
