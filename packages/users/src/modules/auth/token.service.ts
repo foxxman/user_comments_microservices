@@ -122,13 +122,18 @@ export class TokenService {
       },
       context: 'createRefreshToken',
     });
-    const expireAt = addDays(Date.now(), 60).toISOString();
+    const expireAt = addDays(Date.now(), 60);
 
-    await this.refreshTokenRepository.create({ userId: id, token, pairId });
+    await this.refreshTokenRepository.create({
+      userId: id,
+      token,
+      pairId,
+      expireAt,
+    });
 
     return {
       token,
-      expireAt,
+      expireAt: expireAt.toISOString(),
     };
   }
 

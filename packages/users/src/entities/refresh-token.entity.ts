@@ -13,4 +13,7 @@ export class RefreshTokenEntity {
 
   @Column()
   token: string;
+
+  @Column()
+  expireAt: Date;
 }

@@ -6,6 +6,7 @@ import { RepositoryModule } from '@modules/repository/repository.module';
 import { UsersModule } from '@modules/users/users.module';
 
 import { AuthService } from './auth.service';
+import { RefreshTokenCleanupService } from './comments-cleanup.service';
 import { TokenService } from './token.service';
 
 @Module({
@@ -20,7 +21,7 @@ import { TokenService } from './token.service';
     }),
     RepositoryModule,
   ],
-  providers: [AuthService, TokenService],
+  providers: [AuthService, TokenService, RefreshTokenCleanupService],
   exports: [TokenService, AuthService],
 })
 export class AuthModule {}

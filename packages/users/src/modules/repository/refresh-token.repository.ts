@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 
 import { RefreshTokenEntity } from '@entities/refresh-token.entity';
 
@@ -24,15 +24,18 @@ export class RefreshTokenRepository {
     pairId,
     userId,
     token,
+    expireAt,
   }: {
     pairId: string;
     userId: string;
     token: string;
+    expireAt: Date;
   }): Promise<RefreshTokenEntity> {
     const createdToken = this.refreshTokenRepository.create({
       pairId,
       userId,
       token,
+      expireAt,
     });
     return this.refreshTokenRepository.save(createdToken);
   }
@@ -48,5 +51,9 @@ export class RefreshTokenRepository {
     }
 
     return token;
+  }
+
+  async deleteMany(where: FindOptionsWhere<RefreshTokenEntity>) {
+    await this.refreshTokenRepository.delete(where);
   }
 }
