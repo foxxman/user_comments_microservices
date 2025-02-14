@@ -1,4 +1,3 @@
-export { IUserResponse } from "./user.response";
-export { ILoginResponse } from "./login.response";
-export { IRefreshResponse } from "./refresh.response";
-export { IGetFileResponse } from "./get-file.response";
+export * from "./auth";
+export * from "./users";
+export * from "./comments";

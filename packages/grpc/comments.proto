@@ -3,4 +3,18 @@ syntax = "proto3";
 package comments;
 
 service CommentsService {
+    rpc CreateComment (CreateCommentRequest) returns (Comment);
+}
+
+message Comment {
+    string id = 1;
+    string text = 2;
+    string userId = 3;
+    string createdAt = 4;
+    string updatedAt = 5;
+}
+
+message CreateCommentRequest {
+    string text = 1;
+    string userId = 2;
 }

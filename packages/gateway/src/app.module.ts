@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { getConfiguration } from 'common';
 
 import { AuthModule } from './modules/auth/auth.module';
+import { CommentsModule } from './modules/comments/comments.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -14,6 +15,7 @@ import { UsersModule } from './modules/users/users.module';
     }),
     AuthModule,
     UsersModule,
+    CommentsModule,
   ],
 })
 export class AppModule {}

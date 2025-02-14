@@ -19,8 +19,6 @@ async function bootstrap() {
     },
   });
 
-  const logger = new Logger('USERS');
-
   await app.startAllMicroservices();
 }
 bootstrap();
