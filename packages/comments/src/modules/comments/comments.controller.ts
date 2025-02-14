@@ -3,6 +3,7 @@ import { GrpcMethod } from '@nestjs/microservices';
 import {
   ICommentResponse,
   ICreateCommentDTO,
+  IDeleteCommentDTO,
   IGetCommentsDTO,
   IGetCommentsResponse,
   IUpdateCommentDTO,
@@ -34,5 +35,11 @@ export class CommentsController {
       total,
       comments: comments.map(commentEntityToDto),
     };
+  }
+
+  @GrpcMethod('CommentsService')
+  async deleteComment(data: IDeleteCommentDTO): Promise<ICommentResponse> {
+    const comment = await this.commentsService.deleteComment(data);
+    return commentEntityToDto(comment);
   }
 }

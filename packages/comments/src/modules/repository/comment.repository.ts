@@ -57,4 +57,16 @@ export class CommentRepository {
   async count(data: { where: Partial<CommentEntity> }): Promise<number> {
     return this.commentRepository.count(data);
   }
+
+  async delete(id: string): Promise<CommentEntity | null> {
+    const comment = await this.findOne({ id });
+
+    if (!comment) {
+      return null;
+    }
+
+    await this.commentRepository.delete(id);
+
+    return comment;
+  }
 }

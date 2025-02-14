@@ -6,6 +6,7 @@ service CommentsService {
     rpc CreateComment (CreateCommentRequest) returns (Comment);
     rpc UpdateComment (UpdateCommentRequest) returns (Comment);
     rpc GetComments (getCommentsRequest) returns (getCommentsResponse);
+    rpc DeleteComment (deleteCommentsRequest) returns (Comment);
 }
 
 message Comment {
@@ -31,6 +32,11 @@ message getCommentsRequest {
     string userId = 1;
     int32 offset = 2;
     int32 limit = 3;
+}
+
+message deleteCommentsRequest {
+    string commentId = 1;
+    string userId = 2;
 }
 
 message getCommentsResponse {

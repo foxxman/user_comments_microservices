@@ -4,6 +4,7 @@ import { isUUID } from 'class-validator';
 import {
   CommentsExceptions,
   ICreateCommentDTO,
+  IDeleteCommentDTO,
   IGetCommentsDTO,
   IUpdateCommentDTO,
   IUsersService,
@@ -72,5 +73,25 @@ export class CommentsService {
     });
 
     return { total, comments };
+  }
+
+  async deleteComment(data: IDeleteCommentDTO): Promise<CommentEntity> {
+    if (!isUUID(data.commentId, '4')) {
+      throw new RpcException(CommentsExceptions.CommentNotFound);
+    }
+
+    const comment = await this.commentRepository.findOne({
+      id: data.commentId,
+    });
+
+    if (!comment) {
+      throw new RpcException(CommentsExceptions.CommentNotFound);
+    }
+
+    if (comment.userId !== data.userId) {
+      throw new RpcException(CommentsExceptions.UserNotCommentOwner);
+    }
+
+    return this.commentRepository.delete(data.commentId);
   }
 }

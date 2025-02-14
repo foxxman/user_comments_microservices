@@ -120,4 +120,27 @@ export class CommentsController implements OnModuleInit {
         .pipe(timeout(REQUEST_TIMEOUT)),
     );
   }
+
+  @RestApiRoute({
+    method: API_METHODS.DELETE,
+    path: '/:commentId',
+    summary: 'Remove comment by ID',
+    response: {
+      httpCode: HttpStatus.OK,
+      description: 'Removed comment',
+      type: CommentResponse,
+    },
+    guardsToUse: [GUARD_NAMES.AUTH],
+  })
+  async deleteComment(
+    @Req() req: AuthorizedRequest,
+    @Param('commentId')
+    commentId: string,
+  ): Promise<CommentResponse> {
+    return await lastValueFrom(
+      this.commentsService
+        .deleteComment({ userId: req.user.id, commentId })
+        .pipe(timeout(REQUEST_TIMEOUT)),
+    );
+  }
 }
